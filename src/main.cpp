@@ -92,14 +92,11 @@ private:
 	bool getvar(std::string const &name, Value *result)
 	{
 		auto it = vars.find(name);
-		if (it == vars.end()) {
-			fprintf(stderr, "E: Variable not found '%s'.", name.c_str());
-			exit(1);
-		} else {
+		if (it != vars.end()) {
 			*result = it->second;
 			return true;
 		}
-		return false;
+		throw VariableNotFound(name);
 	}
 
 	void eval(JSON::Node const &node, Value *result)

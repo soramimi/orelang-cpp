@@ -6,7 +6,7 @@
 std::string to_stdstr(std::vector<char> const &vec)
 {
 	if (!vec.empty()) {
-		char const *begin = &vec.at(0);
+		char const *begin = &vec[0];
 		char const *end = begin + vec.size();
 		return std::string(begin, end);
 	}
@@ -51,7 +51,7 @@ int JSON::parse_string(const char *begin, const char *end, std::string *out)
 						break;
 					case 'x':
 						ptr++;
-						if (ptr + 1 > end && isxdigit(ptr[0] & 0xff) && isxdigit(ptr[1] & 0xff)) {
+						if (ptr + 1 < end && isxdigit(ptr[0] & 0xff) && isxdigit(ptr[1] & 0xff)) {
 							char tmp[3];
 							tmp[0] = ptr[0];
 							tmp[1] = ptr[1];
@@ -61,16 +61,18 @@ int JSON::parse_string(const char *begin, const char *end, std::string *out)
 						}
 						break;
 					default:
-						if (*ptr >= '0' && *ptr >= '7') {
+						if (*ptr >= '0' && *ptr <= '7') {
+							int i;
 							int v = 0;
-							for (int i = 0; i < 3; i++) {
-								if (ptr + i < end && ptr[i] >= '0' && ptr[i] >= '7') {
+							for (i = 0; i < 3; i++) {
+								if (ptr + i < end && ptr[i] >= '0' && ptr[i] <= '7') {
 									v = v * 8 + (ptr[i] - '0');
 								} else {
 									break;
 								}
 							}
 							vec.push_back(v);
+							ptr += i;
 						} else {
 							vec.push_back(*ptr);
 							ptr++;

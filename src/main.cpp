@@ -198,7 +198,7 @@ int main(int argc, char **argv)
 		"    [\"step\","
 		"      [\"set\", \"sum\", [\"+\", [\"get\", \"sum\"], [\"get\", \"i\"]]],"
 		"      [\"set\", \"i\", [\"+\", [\"get\", \"i\"], 1]]]],"
-		"  [\"print\", [\"get\", \"sum\"]]]\"";
+		"  [\"print\", [\"get\", \"sum\"]]]";
 
 	try {
 		JSON json;
